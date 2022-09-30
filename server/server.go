@@ -1,6 +1,7 @@
 package server
 
 import (
+	rpc "connection_pool/thrift_rpc_definitions/gen-go"
 	"context"
 	"fmt"
 	"github.com/apache/thrift/lib/go/thrift"
@@ -8,20 +9,13 @@ import (
 	"github.com/prometheus/common/log"
 	"net"
 	"os"
-	"sort_service/cp-go/thrift_rpc_definitions/gen-go/rpc"
+
 	"time"
 )
 
-type SayHelloHandler struct{}
-
-func (h *SayHelloHandler) SayHello(ctx context.Context, req *rpc.HelloReq) (r *rpc.HelloRsp, err error) {
-	logs.Info("received hello")
-	rsp := rpc.NewHelloRsp()
-	return rsp, nil
-}
-
 func StartServer(host, port string) {
-	transport, err := thrift.NewTServerSocket(net.JoinHostPort("0.0.0.0", port))
+	logs.Info("start server at %v:%v", host, port)
+	transport, err := thrift.NewTServerSocket(net.JoinHostPort(host, port))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "error resolving address:", err)
 		os.Exit(1)
@@ -40,8 +34,9 @@ func StartServer(host, port string) {
 	defer transport.Close()
 
 	var sh SayHelloHandler
+	processor := rpc.NewHelloworldProcessor(&sh)
 
-	server4 := thrift.NewTSimpleServer4(rpc.NewSayHelloProcessor(&sh), transport, transportFactory, protocolFactory)
+	server4 := thrift.NewTSimpleServer4(processor, transport, transportFactory, protocolFactory)
 	go server4.Serve()
 	select {
 	case <-time.After(time.Second):
@@ -77,9 +72,16 @@ func TestClientRequest(ip, port string) {
 
 	client := thrift.NewTStandardClient(iProto, oProto)
 
-	sayHello := rpc.NewSayHelloClient(client)
+	sayHello := rpc.NewHelloworldClient(client)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
+
+	logs.Info("Send a test message from server itself")
+
 	r, e := sayHello.SayHello(ctx, &rpc.HelloReq{})
-	logs.Info("err:%v,rsp:%v", e, r)
+	if e != nil {
+		logs.Error(e)
+	} else {
+		logs.Info("OK! I received the response, content is %v", r)
+	}
 }

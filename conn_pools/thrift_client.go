@@ -13,7 +13,7 @@ type thriftClient struct {
 }
 
 func newThriftClient(address string, timeout time.Duration) (*thriftClient, error) {
-	socket, err := thrift.NewTSocketTimeout(address, timeout)
+	socket, err := thrift.NewTSocketTimeout(address, timeout, 0)
 	if err != nil {
 		return nil, err
 	}
