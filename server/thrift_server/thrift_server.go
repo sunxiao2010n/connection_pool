@@ -1,4 +1,4 @@
-package server
+package thrift_server
 
 import (
 	rpc "connection_pool/thrift_rpc_definitions/gen-go"

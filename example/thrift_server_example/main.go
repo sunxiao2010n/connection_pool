@@ -2,9 +2,8 @@ package main
 
 import (
 	"connection_pool/conn_pools"
-	"connection_pool/server"
-	"connection_pool/zk_tool"
-	_ "connection_pool/zk_tool"
+	"connection_pool/server/thrift_server"
+	"connection_pool/server/zk_tool"
 	"fmt"
 	"github.com/astaxie/beego/logs"
 	"github.com/samuel/go-zookeeper/zk"
@@ -22,10 +21,17 @@ func main() {
 	logs.Info("local ip address is %v", ipAddr)
 
 	zt := &zk_tool.ZkTool{}
+
+	/*************
+		change the following zkAddrs to the actual zk address:
+
+		zt.Init("192.168.216.130")
+	**************/
 	zt.Init("192.168.216.130")
+
 	zt.CreateZPath(ipAddr, zk.FlagEphemeral)
 
-	go server.StartServer(host, port)
+	go thrift_server.StartServer(host, port)
 
 	select {}
 }

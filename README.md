@@ -1,5 +1,27 @@
 # connection_pool
-connection pool for thrift or gRPC
+  
+Connection pool with service discovery.  
+Using protocol thrift or gRPC, and you can imply your own protocol.  
+Default load balance method is weightedRoundRobin.  
+  
+  
+这个连接池形成于某游戏平台。其性能和稳定性由@juxu007进行改进。目前运行在DAU1000以上的环境。  
+  
+Instructions：  
+  
+1.Run zookeeper  
+  create a path on zk：  
+  > '> zkCli.sh  
+  > '> create /connection_pool_test  
+  > '> create /connection_pool_test/server  
+  
+2.Start Example Server  
+  > '> cd connection_pool/example/thrift_server_example  
+  > edit main.go and change zookeeper address to the actual zk  
+  > '> go run main.go  
+  
+3.Start Example Client  
+  > '> cd connection_pool/example/client_example  
+  > edit main.go and change zookeeper address to the actual zk  
+  > '> go run main.go  
 
-这个连接池在某云游戏平台、某推荐平台（大约有1000万的DAU）上验证过，支持thrift协议及gRPC。  
-可以选择负载均衡算法。
