@@ -5,7 +5,7 @@ Using protocol thrift or gRPC, and you can imply your own protocol.
 Default load balance method is weightedRoundRobin.  
   
   
-这个连接池形成于某游戏平台。其性能和稳定性由@juxu007进行改进。目前运行在DAU1000以上的环境。  
+这个连接池形成于某游戏平台。其性能和稳定性由@juxu007进行改进。目前运行在DAU在10M以上的环境。  
   
 Instructions：  
   
