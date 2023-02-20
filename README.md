@@ -1,11 +1,11 @@
 # connection_pool
   
+这个连接池经过了两个游戏平台的打磨。目前在DAU超过10M的环境里表现稳定。  
+
 Connection pool with service discovery.  
-Using protocol thrift or gRPC, and you can imply your own protocol.  
+Choose Thrift or gRPC as the protocol. Custom protocol will be OK too.  
 Default load balance method is weightedRoundRobin.  
   
-  
-这个连接池形成于某游戏平台。其性能和稳定性由@juxu007进行改进。目前运行在DAU在10M以上的环境。  
   
 Instructions：  
   
